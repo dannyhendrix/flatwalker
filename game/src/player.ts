@@ -1,11 +1,14 @@
 import * as input from "./input.js"
 import * as game from "./game.js"
 import * as animation from "./animation.js"
+import { ImageControllerInstance, ImageKeys} from "./imagecontroller.js"
 
 export enum PlayerDirection {
     Up, Down, Left, Right
 }
 
+const ANIMATION_FRAME_W = 22
+const ANIMATION_FRAME_H = 39
 const ANIMATION_IDLE_UP = [[0,0],[1,0],[2,0]]
 const ANIMATION_IDLE_DOWN = [[0,2],[1,2],[2,2]]
 const ANIMATION_IDLE_LEFT = [[0,1],[1,1],[2,1]]
@@ -29,7 +32,7 @@ export class Player implements game.GameUpdatable {
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
-        this.animation = new animation.Animation()
+        this.animation = new animation.Animation(ANIMATION_FRAME_W,ANIMATION_FRAME_H,ImageControllerInstance.getImage(ImageKeys.player))
     }
 
     update(mygame:game.Game, deltaTime:number) {
