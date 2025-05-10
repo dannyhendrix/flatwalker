@@ -1,17 +1,29 @@
+import * as input from "./input.js"
+import * as player from "./player.js"
+
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
 canvas.width = 800;
 canvas.height = 600;
 
-class Game {
-    lastTime: number = 0;
+export class Game {
+    lastTime: number = 0
+    running: boolean = false
+    player: player.Player
+    input: input.Input
+
+    constructor() {
+        this.player = new player.Player(5, 120)
+        this.input = new input.Input()
+    }
 
     update(deltaTime: number) {
-        // Update game logic
+        this.player.update(this)
     }
 
     draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.player.draw(ctx)
         // Draw game objects here
     }
 
@@ -21,14 +33,36 @@ class Game {
 
         this.update(deltaTime);
         this.draw();
-
-        requestAnimationFrame((t) => this.loop(t));
+        if (this.running) {
+            requestAnimationFrame((t) => this.loop(t))
+        }
     }
 
     start() {
-        requestAnimationFrame((t) => this.loop(t));
+        console.log("Start game")
+        this.running = true
+        requestAnimationFrame((t) => this.loop(t))
+
+    }
+
+    pause() {
+        console.log("Pause game")
+        if (this.running) {
+            this.running = false
+        } else {
+            this.running = true
+            requestAnimationFrame((t) => this.loop(t))
+        }
+    }
+
+    testButton() {
+
+        console.log(this.input.keys)
     }
 }
 
 const game = new Game();
-game.start();
+
+// Make the function accessible globally
+(window as any).pauseGame = () => game.pause();
+(window as any).testButton = () => game.testButton();
