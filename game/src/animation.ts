@@ -1,26 +1,25 @@
-export class Animation{
-    frameHeight:number = 39
-    frameWidth:number = 22
-    frameTime:number = 8
-    lastFrameTime:number = 0
+export class Animation {
+    frameHeight: number = 39
+    frameWidth: number = 22
+    frameTime: number = 8
+    lastFrameTime: number = 0
     spriteSheet: HTMLImageElement
     currentAnimation: number[][] = []
     currentFrame: number = 0
-    constructor(frameWidth:number,frameHeight:number,spriteSheet:HTMLImageElement){
+    constructor(frameWidth: number, frameHeight: number, spriteSheet: HTMLImageElement) {
         this.frameHeight = frameHeight
         this.frameWidth = frameWidth
         this.spriteSheet = spriteSheet
     }
-    draw(ctx:CanvasRenderingContext2D,x:number,y:number,animation:number[][]){
-        if(animation != this.currentAnimation){
-            console.log("animation diff")
+    draw(ctx: CanvasRenderingContext2D, x: number, y: number, animation: number[][]) {
+        if (animation != this.currentAnimation) {
             this.lastFrameTime = 0
             this.currentFrame = 0
             this.currentAnimation = animation
-        }else{
+        } else {
             this.lastFrameTime += 1
         }
-        if(this.lastFrameTime >= this.frameTime){
+        if (this.lastFrameTime >= this.frameTime) {
             this.currentFrame = (this.currentFrame + 1) % animation.length
             this.lastFrameTime = 0
         }

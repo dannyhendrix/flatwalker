@@ -1,6 +1,7 @@
 import * as input from "./input.js"
 import * as player from "./player.js"
 import * as render from "./render.js"
+import { Tree } from "./tree.js"
 
 export interface GameUpdatable{
     update(game:Game,deltaTime: number):void
@@ -16,13 +17,16 @@ export class Game {
 
     constructor() {
         var canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
-        
+
         this.player = new player.Player(5, 120)
         this.input = new input.Input()
         this.render = new render.Render(canvas)
 
+        var tree = new Tree(100, 100)
+
         this.renderobjects = []
         this.renderobjects.push(this.player)
+        this.renderobjects.push(tree)
     }
 
     update(deltaTime: number) {
