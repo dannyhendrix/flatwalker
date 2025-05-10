@@ -38,7 +38,7 @@ export class Player {
         this.state_isRunning = controleInput.isKeyPressed(input.GameControls.Run)
     }
 
-    getPlayerStateFromControl(control:string){
+    getPlayerStateFromControl(control:input.GameControls){
         switch(control){
             case input.GameControls.MoveDown: return PlayerState.WalkDown
             case input.GameControls.MoveUp: return PlayerState.WalkUp
