@@ -40,7 +40,7 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add package.json
+        git add game/package.json
         git commit -m "Bump version (${{ github.event.inputs.release_type }}) [skip ci]"
         git push
       env:
