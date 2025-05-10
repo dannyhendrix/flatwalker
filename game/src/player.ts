@@ -5,7 +5,7 @@ export enum PlayerState {
     Idle, WalkUp, WalkDown, WalkLeft, WalkRight
 }
 
-export class Player {
+export class Player implements game.GameUpdatable {
     x: number;
     y: number;
     speed: number = 2
@@ -18,7 +18,7 @@ export class Player {
         this.y = y;
     }
 
-    update(mygame:game.Game) {
+    update(mygame:game.Game, deltaTime:number) {
         this.setPlayerState(mygame.input)
         this.handlePlayerState(this.state)
     }

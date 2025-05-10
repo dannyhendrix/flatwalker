@@ -1,52 +1,50 @@
 import * as input from "./input.js"
 import * as player from "./player.js"
+import * as render from "./render.js"
 
-const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d")!;
-canvas.width = 800;
-canvas.height = 600;
+export interface GameUpdatable{
+    update(game:Game,deltaTime: number):void
+}
 
 export class Game {
     lastTime: number = 0
     running: boolean = false
     player: player.Player
     input: input.Input
+    render: render.Render
+    renderobjects: render.RenderObject[]
 
     constructor() {
+        var canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+        
         this.player = new player.Player(5, 120)
         this.input = new input.Input()
+        this.render = new render.Render(canvas)
+
+        this.renderobjects = []
+        this.renderobjects.push(this.player)
     }
 
     update(deltaTime: number) {
-        this.player.update(this)
-    }
+        this.player.update(this, deltaTime)
 
-    draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        this.player.draw(ctx)
-        // Draw game objects here
+        this.render.update(this, deltaTime)
     }
 
     loop(timestamp: number) {
         const deltaTime = timestamp - this.lastTime;
         this.lastTime = timestamp;
-
         this.update(deltaTime);
-        this.draw();
         if (this.running) {
             requestAnimationFrame((t) => this.loop(t))
         }
     }
 
-    start() {
-        console.log("Start game")
-        this.running = true
-        requestAnimationFrame((t) => this.loop(t))
-
-    }
-
-    pause() {
+    pause(start:boolean = false) {
         console.log("Pause game")
+        if(start && this.running){
+            return
+        }
         if (this.running) {
             this.running = false
         } else {
@@ -56,7 +54,6 @@ export class Game {
     }
 
     testButton() {
-
         console.log(this.input.keys)
     }
 }
