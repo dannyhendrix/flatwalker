@@ -19,14 +19,14 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Change to game folder
-      run: cd game
-      
     - name: Install dependencies
+      working-directory: game
       run: npm install
 
     - name: Run tests with coverage
+      working-directory: game
       run: npm test -- --coverage
 
     - name: Build the project
+      working-directory: game
       run: npm run build
