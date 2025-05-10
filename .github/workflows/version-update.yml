@@ -27,9 +27,11 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
+      working-directory: game
       run: npm install
 
     - name: Bump Version Based on User Input
+      working-directory: game
       run: npm version ${{ github.event.inputs.release_type }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
