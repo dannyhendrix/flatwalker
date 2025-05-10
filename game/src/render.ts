@@ -1,6 +1,7 @@
 import * as game from "./game.js"
 
 export interface RenderObject{
+    renderYorder:number
     draw(ctx: CanvasRenderingContext2D): void
 }
 

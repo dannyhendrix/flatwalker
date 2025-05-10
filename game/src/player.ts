@@ -2,6 +2,9 @@ import * as input from "./input.js"
 import * as game from "./game.js"
 import * as animation from "./animation.js"
 import { ImageControllerInstance, ImageKeys} from "./imagecontroller.js"
+import { RenderObject } from "./render.js"
+import { RectangleDefinition,PositionDefinition } from "./collision.js";
+import { GameObject } from "./gameobject.js"
 
 export enum PlayerDirection {
     Up, Down, Left, Right
@@ -19,9 +22,7 @@ const ANIMATION_WALK_LEFT = [[3,1],[4,1],[5,1]]
 const ANIMATION_WALK_RIGHT = [[3,3],[4,3],[5,3]]
 const ANIMATION_DIE = [[12,0],[12,1],[12,2]]
 
-export class Player implements game.GameUpdatable {
-    x: number;
-    y: number;
+export class Player extends GameObject implements game.GameUpdatable, RenderObject {
     speed: number = 2
     runspeed: number = 5
     state_direction: PlayerDirection = PlayerDirection.Down
@@ -29,9 +30,8 @@ export class Player implements game.GameUpdatable {
     state_isRunning = false
     animation: animation.Animation
 
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+    constructor(game:game.Game, x: number, y: number) {
+        super(game,x,y,new RectangleDefinition(-4,8,-4,8),new RectangleDefinition(-11,22,-35,39))
         this.animation = new animation.Animation(ANIMATION_FRAME_W,ANIMATION_FRAME_H,ImageControllerInstance.getImage(ImageKeys.player))
     }
 
@@ -42,8 +42,9 @@ export class Player implements game.GameUpdatable {
 
     draw(ctx: CanvasRenderingContext2D) {
         ctx.fillStyle = "blue";
-        ctx.fillRect(this.x, this.y, 20, 20);
-        this.animation.draw(ctx,this.x,this.y, this.getAnimationFromState())
+        this.animation.draw(ctx,this.frame.x1, this.frame.y1, this.getAnimationFromState())
+        ctx.fillRect(this.collision.x1, this.collision.y1, this.collision.w, this.collision.h)
+        ctx.strokeRect(this.frame.x1, this.frame.y1, this.frame.w, this.frame.h)
     }
     
     setPlayerState(controleInput:input.Input) {
@@ -71,23 +72,26 @@ export class Player implements game.GameUpdatable {
     handlePlayerState(){
         if(!this.state_isMoving) 
             return
+        var movex = 0
+        var movey = 0
         var walkspeed = this.speed
         if(this.state_isRunning) 
             walkspeed = this.runspeed
         switch(this.state_direction){
             case PlayerDirection.Down:
-                this.y += walkspeed
+                movey = walkspeed
                 break
             case PlayerDirection.Up:
-                this.y -= walkspeed
+                movey = -walkspeed
                 break
             case PlayerDirection.Left:
-                this.x -= walkspeed
+                movex = -walkspeed
                 break
             case PlayerDirection.Right:
-                this.x += walkspeed
+                movex = walkspeed
                 break
         }
+        this.updatePosition(movex, movey)
     }
 
     getAnimationFromState(){

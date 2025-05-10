@@ -1,3 +1,4 @@
+import { GameObject } from "./gameobject.js"
 import * as input from "./input.js"
 import * as player from "./player.js"
 import * as render from "./render.js"
@@ -14,23 +15,30 @@ export class Game {
     input: input.Input
     render: render.Render
     renderobjects: render.RenderObject[]
+    gameObjects: GameObject[]
 
     constructor() {
         var canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 
-        this.player = new player.Player(5, 120)
+        this.player = new player.Player(this,5, 120)
         this.input = new input.Input()
         this.render = new render.Render(canvas)
 
-        var tree = new Tree(100, 100)
+        var tree = new Tree(this,100, 100)
 
         this.renderobjects = []
         this.renderobjects.push(this.player)
         this.renderobjects.push(tree)
+
+        this.gameObjects = []
+        this.gameObjects.push(this.player)
+        this.gameObjects.push(tree)
     }
 
     update(deltaTime: number) {
         this.player.update(this, deltaTime)
+        this.renderobjects.sort((a, b) => a.renderYorder - b.renderYorder);
+
 
         this.render.update(this, deltaTime)
     }
