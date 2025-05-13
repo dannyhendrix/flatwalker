@@ -1,8 +1,9 @@
 export enum ImageKeys{
-    player,trees
+    player,trees,mines
 }
 const ImageSources = new Map<ImageKeys, string>([
     [ImageKeys.player,"res/player.png"],
+    [ImageKeys.mines,"res/mines.png"],
     [ImageKeys.trees,"res/trees.png"]
 ])
 

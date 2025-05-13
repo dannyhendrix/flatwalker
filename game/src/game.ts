@@ -1,11 +1,12 @@
 import { GameObject } from "./gameobject.js"
 import * as input from "./input.js"
+import { Mine } from "./mine.js"
 import * as player from "./player.js"
 import * as render from "./render.js"
 import { Tree } from "./tree.js"
 
-export interface GameUpdatable{
-    update(game:Game,deltaTime: number):void
+export interface GameUpdatable {
+    update(game: Game, deltaTime: number): void
 }
 
 export class Game {
@@ -20,19 +21,22 @@ export class Game {
     constructor() {
         var canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 
-        this.player = new player.Player(this,5, 120)
+        this.player = new player.Player(this, 5, 120)
         this.input = new input.Input()
         this.render = new render.Render(canvas)
 
-        var tree = new Tree(this,100, 100)
+        var tree = new Tree(this, 100, 100)
+        var mine = new Mine(this, 200, 150)
 
         this.renderobjects = []
         this.renderobjects.push(this.player)
         this.renderobjects.push(tree)
+        this.renderobjects.push(mine)
 
         this.gameObjects = []
         this.gameObjects.push(this.player)
         this.gameObjects.push(tree)
+        this.gameObjects.push(mine)
     }
 
     update(deltaTime: number) {
@@ -52,9 +56,9 @@ export class Game {
         }
     }
 
-    pause(start:boolean = false) {
+    pause(start: boolean = false) {
         console.log("Pause game")
-        if(start && this.running){
+        if (start && this.running) {
             return
         }
         if (this.running) {
