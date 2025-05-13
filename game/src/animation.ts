@@ -33,5 +33,4 @@ export class Animation {
             this.frameWidth, this.frameHeight    // Destination width, height
         );
     }
-    // 286/13 x 156/4
 }
